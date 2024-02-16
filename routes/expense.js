@@ -1,6 +1,6 @@
 const express = require('express')
 const { verifyAccessTokenFunction } = require('../controllers/jwt')
-const { create, edit, get, getOne, del } = require('../controllers/category')
+const { create, edit, get, getOne, del } = require('../controllers/expense')
 
 const router = express.Router()
 

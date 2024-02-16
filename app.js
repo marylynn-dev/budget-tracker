@@ -15,9 +15,11 @@ app.use(express.urlencoded({ extended: true }))
 //route handlers
 const authRoutes = require('./routes/auth')
 const categoryRoutes = require('./routes/category')
+const expenseRoutes = require('./routes/expense')
 
 app.use('/auth', authRoutes)
 app.use('/category', categoryRoutes)
+app.use('/expense', expenseRoutes)
 
 app.get('/', verifyAccessToken, async (req, res, next) => {
     console.log(req.headers['authorization'])
