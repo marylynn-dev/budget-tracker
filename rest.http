@@ -1,0 +1,42 @@
+GET http://localhost:3001/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieW91cnMgdHJ1bHkiLCJpYXQiOjE2OTU1MTczNTAsImV4cCI6MTY5NTUyMDk1MCwiYXVkIjoiNjUwZjFiZjA5ZTcxOWIxZGY0NTQ0OThkIiwiaXNzIjoibWUuY29tIn0.l9O2KJ1Oio_jWX-QcMhl2BLg1t5aw5ejUxHttFR4_hk
+
+### login route
+POST http://localhost:3001/auth/log-in
+Content-Type: application/json
+
+{
+     "email": "JaneDoe@gmail.com",
+     "password" : "strongPassword"
+}
+
+
+### register route
+POST http://localhost:3001/auth/register
+Content-Type: application/json
+
+{
+     "email": "Ja@gmail.com",
+     "password" : "strongPassword",
+     "name" : "Jane Doe"
+}
+
+### refresh token route
+POST http://localhost:3001/auth/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieW91cnMgdHJ1bHkiLCJpYXQiOjE3MDgwNzQxODUsImV4cCI6MTczOTYzMTc4NSwiYXVkIjoiNjVjZjI0MzFmZjA5MGY2ZTJlZjdlYTY0IiwiaXNzIjoibWUuY29tIn0.OiVKVu20FcAWF5okpRjZDFH_-PL23LGuZl9CmBOmAqY"
+}
+
+### log out route
+DELETE  http://localhost:3001/auth/log-out
+Content-Type: application/json
+
+{
+     "refreshToken" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieW91cnMgdHJ1bHkiLCJpYXQiOjE3MDgwNzQxODUsImV4cCI6MTczOTYzMTc4NSwiYXVkIjoiNjVjZjI0MzFmZjA5MGY2ZTJlZjdlYTY0IiwiaXNzIjoibWUuY29tIn0.OiVKVu20FcAWF5okpRjZDFH_-PL23LGuZl9CmBOmAqY"
+}
+
+
+
+
