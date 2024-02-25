@@ -34,7 +34,7 @@ const logInFunction = async (req, res, next) => {
         if (!user) throw createError.NotFound('User not registered')
 
         const isMatch = await user.isValidPassword(result.password)
-        if (!isMatch) throw createError.Unauthorized('Username/Password is not valid')
+        if (isMatch) throw createError.Unauthorized('Username/Password is not valid')
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
 
@@ -76,9 +76,18 @@ const logOutFunction = async (req, res, next) => {
     }
 }
 
+function getOne(req, res) {
+    const userId = req.params.id
+    User
+        .findOne({ _id: userId })
+        .then((userData) => res.json({ data: userData }))
+        .catch((err) => res.status(500).json({ message: err.message }))
+}
+
 module.exports = {
     registerFunction,
     logInFunction,
     refreshTokenFunction,
     logOutFunction,
+    getOne
 }

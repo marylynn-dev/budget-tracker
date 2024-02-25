@@ -5,7 +5,7 @@ async function create(req, res) {
     const { title, amount, category, date, description } = req.body
     const userId = req.payload.aud
     try {
-        const expense = new Expense({ title, amount, category, date, description })
+        const expense = new Expense({ title, amount, category, date, description, userId })
         const savedexpense = await expense.save()
         const user = await User.findById(userId)
         if (!user) { return res.json({ message: 'User not found!' }) }
@@ -49,17 +49,47 @@ function getOne(req, res) {
 }
 
 function del(req, res) {
-    const expenseId = req.params.id
-    Expense
-        .deleteOne({ _id: expenseId })
-        .then(() => res.json({ message: "expense Deleted Successfully" }))
-        .catch((err) => res.status(500).json({ message: err.message }))
+    const expenseId = req.params.id;
+
+    // Step 1: Delete the expense
+    Expense.deleteOne({ _id: expenseId })
+        .then(() => {
+            // Step 2: Update the users to remove the expense ID from their expense array
+            return User.updateMany(
+                { expenses: expenseId }, // Filter users where the expense ID is in their expenses array
+                { $pull: { expenses: expenseId } } // Remove the expense ID from the expenses array
+            );
+        })
+        .then(() => {
+            // If both operations are successful, respond with success message
+            res.json({ message: "Expense deleted successfully" });
+        })
+        .catch((err) => {
+            // If an error occurs during the operation, respond with an error message
+            res.status(500).json({ message: err.message });
+        });
 }
+
+//get expenses for a specific user
+async function getForOneUser(req, res) {
+    const userId = req.params.userId; // Assuming userId is passed as a route parameter
+
+    try {
+        const expenses = await Expense.find({ userId: userId }).sort({ date: 1 })
+        res.json({ message: "Expenses for user " + userId, data: expenses });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+
+
 
 module.exports = {
     create,
     edit,
     get,
     getOne,
-    del
+    del,
+    getForOneUser
 }

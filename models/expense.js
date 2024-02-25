@@ -21,6 +21,10 @@ const expenseSchema = mongoose.Schema({
         required: true,
         type: String
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+    }
 })
 
 const expenseModel = mongoose.model('expense', expenseSchema)
