@@ -5,7 +5,7 @@ async function create(req, res) {
     const { title } = req.body
     const userId = req.payload.aud
     try {
-        const category = new Category({ title })
+        const category = new Category({ title, userId })
         const savedCategory = await category.save()
         const user = await User.findById(userId)
         if (!user) { return res.json({ message: 'User not found!' }) }
@@ -49,11 +49,25 @@ function getOne(req, res) {
 }
 
 function del(req, res) {
-    const categoryId = req.params.id
-    Category
-        .deleteOne({ _id: categoryId })
-        .then(() => res.json({ message: "Category Deleted Successfully" }))
-        .catch((err) => res.status(500).json({ message: err.message })) 
+    const categoryId = req.params.id;
+
+    // Step 1: Delete the category
+    Category.deleteOne({ _id: categoryId })
+        .then(() => {
+            // Step 2: Update the users to remove the category ID from their category array
+            return User.updateMany(
+                { categorys: categoryId }, // Filter users where the category ID is in their categorys array
+                { $pull: { categorys: categoryId } } // Remove the category ID from the categorys array
+            );
+        })
+        .then(() => {
+            // If both operations are successful, respond with success message
+            res.json({ message: "category deleted successfully" });
+        })
+        .catch((err) => {
+            // If an error occurs during the operation, respond with an error message
+            res.status(500).json({ message: err.message });
+        });
 }
 
 module.exports = {

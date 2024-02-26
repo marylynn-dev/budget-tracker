@@ -6,8 +6,7 @@ const { result } = require('@hapi/joi/lib/base')
 
 const signAccessTokenFunction = (userId) => {
     return new Promise((resolve, reject) => {
-        const payload = {
-        }
+        const payload = {}
         const secret = process.env.ACCESS_TOKEN_SECRET
         const options = {
             expiresIn: '1h',
@@ -62,13 +61,10 @@ const verifyAccessTokenFunction = (req, res, next) => {
 
 const signRefreshTokenFunction = (userId) => {
     return new Promise((resolve, reject) => {
-        const payload = {
-            name: 'yours truly',
-        }
+        const payload = {}
         const secret = process.env.REFRESH_TOKEN_SECRET
         const options = {
-            expiresIn: '1y',
-            issuer: 'me.com',
+            expiresIn: '1h',
             audience: userId
         }
         JWT.sign(payload, secret, options, (error, token) => {
