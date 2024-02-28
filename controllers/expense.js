@@ -69,18 +69,30 @@ function del(req, res) {
             res.status(500).json({ message: err.message });
         });
 }
-
-//get expenses for a specific user
+//get for one user
 async function getForOneUser(req, res) {
     const userId = req.params.userId; // Assuming userId is passed as a route parameter
 
     try {
-        const expenses = await Expense.find({ userId: userId }).sort({ date: 1 })
-        res.json({ message: "Expenses for user " + userId, data: expenses });
+        const expenses = await Expense.find({ userId: userId }).sort({ date: 1 });
+
+        // Organize expenses by month and year
+        const expensesByMonthYear = {};
+        expenses.forEach(expense => {
+            const date = new Date(expense.date);
+            const monthYearKey = `${date.getMonth() + 1}-${date.getFullYear()}`;
+            if (!expensesByMonthYear[monthYearKey]) {
+                expensesByMonthYear[monthYearKey] = [];
+            }
+            expensesByMonthYear[monthYearKey].push(expense);
+        });
+
+        res.json({ message: "Expenses for user " + userId, data: expensesByMonthYear });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
+
 
 
 
