@@ -3,6 +3,8 @@ const express = require('express')
 const morgan = require('morgan')
 const createError = require('http-errors')
 const { verifyAccessToken } = require('./helpers/jwt')
+const cors = require('cors')
+const cookieParser = require('cookie-parser');
 
 //create express app
 const app = express()
@@ -11,6 +13,8 @@ const app = express()
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+app.use(cookieParser());
 
 //route handlers
 const authRoutes = require('./routes/auth')
