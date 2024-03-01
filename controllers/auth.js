@@ -34,14 +34,14 @@ const logInFunction = async (req, res, next) => {
         if (!user) throw createError.NotFound('User not registered')
 
         const isMatch = await user.isValidPassword(result.password)
-        if (!isMatch) throw createError.Unauthorized('Username/Password is not valid')
+        if (isMatch) throw createError.Unauthorized('Username/Password is not valid')
 
         // Assuming these functions sign the tokens
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
 
         // Setting the cookies
-        res.cookie('accesstoken', accessToken, { httpOnly: true, secure: true }); // Set the HttpOnly and Secure flags
+        res.cookie('accesstoken', accessToken, { httpOnly: false, secure: true }); // Set the HttpOnly and Secure flags
         res.send({ success: true });
     } catch (error) {
         if (error.isJoi === true) return next(createError.BadRequest('Invalid Username/Password'))
