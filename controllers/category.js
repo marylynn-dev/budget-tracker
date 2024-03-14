@@ -1,5 +1,6 @@
 const Category = require('../models/category.js')
 const User = require('../models/user.js')
+const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
     const { title } = req.body
@@ -7,14 +8,19 @@ async function create(req, res) {
     try {
         const category = new Category({ title, userId })
         const savedCategory = await category.save()
+
         const user = await User.findById(userId)
-        if (!user) { return res.json({ message: 'User not found!' }) }
+        if (!user) {
+            return res.status(404).json({ message: 'User not found!' });
+        }
+
         user.categories.push(savedCategory._id)
         await user.save()
+
         res.json({ message: "User and Category Updated Successfully", data: savedCategory })
     } catch (err) {
         console.log(err)
-        res.json({ message: err.message })
+        res.status(500).json({ message: err.message })
     }
 }
 
@@ -70,10 +76,25 @@ function del(req, res) {
         });
 }
 
+// get categories for one user
+async function getForOneUser(req, res) {
+    const authHeader = req.headers['authorization'];
+
+    try {
+        const userId = getUserIdFromHeader(authHeader);
+        const categories = await Category.find({ userId: userId }); // Query categories for the specific user
+        res.json({ message: "Categories for the user", data: categories });
+    } catch (err) {
+        res.status(401).json({ message: err.message });
+    }
+}
+
+
 module.exports = {
     create,
     edit,
     get,
     getOne,
-    del
+    del,
+    getForOneUser
 }

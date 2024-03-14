@@ -105,9 +105,46 @@ const verifyRefreshTokenFunction = (refreshToken) => {
     })
 }
 
+const decodeTokenFunction = (token) => {
+    try {
+        const decodedToken = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        return decodedToken;
+    } catch (error) {
+        throw createError.Unauthorized('Invalid access token');
+    }
+}
+
+const getUserIdFromHeader = (authHeader) => {
+    if (!authHeader) {
+        throw new Error('Authorization header missing');
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        throw new Error('Access token missing');
+    }
+
+    try {
+        const decodedToken = JWT.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const userId = decodedToken.aud;
+
+        if (!userId) {
+            throw new Error('User not found');
+        }
+
+        return userId;
+    } catch (error) {
+        throw createError.Unauthorized('Invalid access token');
+    }
+};
+
+
 module.exports = {
     signAccessTokenFunction,
     verifyAccessTokenFunction,
     signRefreshTokenFunction,
     verifyRefreshTokenFunction,
+    decodeTokenFunction,
+    getUserIdFromHeader
 }

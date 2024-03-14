@@ -4,11 +4,11 @@ const { create, edit, get, getOne, del, getForOneUser } = require('../controller
 
 const router = express.Router()
 
-router.get('/', get)
+router.get('/', verifyAccessTokenFunction, get)
 router.post('/', verifyAccessTokenFunction, create)
-router.put('/:id', edit)
-router.get('/:id', getOne)
-router.delete('/:id', del)
-router.get('/get/:userId', getForOneUser)
+router.put('/:id', verifyAccessTokenFunction, edit)
+router.get('/:id', verifyAccessTokenFunction, getOne)
+router.delete('/:id', verifyAccessTokenFunction, del)
+router.get('/get/:userId', verifyAccessTokenFunction, getForOneUser)
 
 module.exports = router

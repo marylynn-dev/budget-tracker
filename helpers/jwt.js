@@ -1,4 +1,4 @@
-const { signAccessTokenFunction, verifyAccessTokenFunction, signRefreshTokenFunction, verifyRefreshTokenFunction } = require('../controllers/jwt')
+const { signAccessTokenFunction, verifyAccessTokenFunction, signRefreshTokenFunction, verifyRefreshTokenFunction, decodeTokenFunction, getUserIdFromHeader } = require('../controllers/jwt')
 
 module.exports = {
     signAccessToken: signAccessTokenFunction,
@@ -8,6 +8,10 @@ module.exports = {
     signRefreshToken: signRefreshTokenFunction,
 
     verifyRefreshToken: verifyRefreshTokenFunction,
+
+    decodeTokenFunction: decodeTokenFunction,
+
+    getUserIdFromHeader: getUserIdFromHeader
 
 
 }

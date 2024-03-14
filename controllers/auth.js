@@ -1,7 +1,8 @@
 const createError = require('http-errors')
 const User = require('../models/user')
 const { authSchema } = require('../helpers/validation')
-const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../helpers/jwt')
+const { signAccessToken, signRefreshToken, verifyRefreshToken, decodeTokenFunction, getUserIdFromHeader } = require('../helpers/jwt')
+
 const Client = require('../helpers/init-redis')
 
 const registerFunction = async (req, res, next) => {
@@ -34,15 +35,13 @@ const logInFunction = async (req, res, next) => {
         if (!user) throw createError.NotFound('User not registered')
 
         const isMatch = await user.isValidPassword(result.password)
-        if (isMatch) throw createError.Unauthorized('Username/Password is not valid')
+        if (!isMatch) throw createError.Unauthorized('Username/Password is not valid')
 
         // Assuming these functions sign the tokens
         const accessToken = await signAccessToken(user.id)
         const refreshToken = await signRefreshToken(user.id)
 
-        // Setting the cookies
-        res.cookie('accesstoken', accessToken, { httpOnly: false, secure: true }); // Set the HttpOnly and Secure flags
-        res.send({ success: true });
+        res.send({ accessToken, refreshToken });
     } catch (error) {
         if (error.isJoi === true) return next(createError.BadRequest('Invalid Username/Password'))
         next(error)
@@ -81,13 +80,28 @@ const logOutFunction = async (req, res, next) => {
     }
 }
 
-function getOne(req, res) {
-    const userId = req.params.id
-    User
-        .findOne({ _id: userId })
-        .then((userData) => res.json({ data: userData }))
-        .catch((err) => res.status(500).json({ message: err.message }))
+const getOne = async (req, res) => {
+    const authHeader = req.headers['authorization'];
+
+    try {
+        const userId = getUserIdFromHeader(authHeader);
+        const userData = await User.findOne({ _id: userId });
+
+        if (!userData) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ data: userData });
+    } catch (error) {
+        return res.status(error.status || 500).json({ message: error.message });
+    }
 }
+
+module.exports = {
+    getOne
+};
+
+
 
 module.exports = {
     registerFunction,
