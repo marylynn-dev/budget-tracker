@@ -1,5 +1,6 @@
 const Expense = require('../models/expense.js')
 const User = require('../models/user.js')
+const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
     const { title, amount, category, date, description } = req.body
@@ -14,7 +15,7 @@ async function create(req, res) {
         res.json({ message: "User and expense Updated Successfully", data: savedexpense })
     } catch (err) {
         console.log(err)
-        res.json({ message: err.message })
+        res.status(500).json({ message: err.message })
     }
 }
 
@@ -71,23 +72,25 @@ function del(req, res) {
 }
 //get for one user
 async function getForOneUser(req, res) {
-    const userId = req.params.userId; // Assuming userId is passed as a route parameter
+    const authHeader = req.headers['authorization'];
 
     try {
+        const userId = getUserIdFromHeader(authHeader);
         const expenses = await Expense.find({ userId: userId }).sort({ date: 1 });
 
-        // Organize expenses by month and year
-        const expensesByMonthYear = {};
-        expenses.forEach(expense => {
-            const date = new Date(expense.date);
-            const monthYearKey = `${date.getMonth() + 1}-${date.getFullYear()}`;
-            if (!expensesByMonthYear[monthYearKey]) {
-                expensesByMonthYear[monthYearKey] = [];
-            }
-            expensesByMonthYear[monthYearKey].push(expense);
-        });
 
-        res.json({ message: "Expenses for user " + userId, data: expensesByMonthYear });
+        // // Organize expenses by month and year
+        // const expensesByMonthYear = {};
+        // expenses.forEach(expense => {
+        //     const date = new Date(expense.date);
+        //     const monthYearKey = `${date.getMonth() + 1}-${date.getFullYear()}`;
+        //     if (!expensesByMonthYear[monthYearKey]) {
+        //         expensesByMonthYear[monthYearKey] = [];
+        //     }
+        //     expensesByMonthYear[monthYearKey].push(expense);
+        // });
+
+        res.json({ message: "Expenses for user ", data: expenses });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

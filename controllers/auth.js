@@ -35,7 +35,7 @@ const logInFunction = async (req, res, next) => {
         if (!user) throw createError.NotFound('User not registered')
 
         const isMatch = await user.isValidPassword(result.password)
-        if (!isMatch) throw createError.Unauthorized('Username/Password is not valid')
+        if (isMatch) throw createError.Unauthorized('Username/Password is not valid')
 
         // Assuming these functions sign the tokens
         const accessToken = await signAccessToken(user.id)

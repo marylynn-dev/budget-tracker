@@ -5,10 +5,10 @@ const { create, edit, get, getOne, del, getForOneUser } = require('../controller
 const router = express.Router()
 
 router.get('/', verifyAccessTokenFunction, get)
+router.get('/one-user', getForOneUser)
 router.post('/', verifyAccessTokenFunction, create)
 router.put('/:id', verifyAccessTokenFunction, edit)
 router.get('/:id', verifyAccessTokenFunction, getOne)
 router.delete('/:id', verifyAccessTokenFunction, del)
-router.get('/get/:userId', verifyAccessTokenFunction, getForOneUser)
 
 module.exports = router
