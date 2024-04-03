@@ -1,18 +1,32 @@
 const Expense = require('../models/expense.js')
 const User = require('../models/user.js')
+const Category = require('../models/category.js')
 const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
     const { title, amount, category, date, description } = req.body
+
     const userId = req.payload.aud
     try {
         const expense = new Expense({ title, amount, category, date, description, userId })
+        console.log(category)
+
         const savedexpense = await expense.save()
+
+        //update user's expense array
         const user = await User.findById(userId)
         if (!user) { return res.json({ message: 'User not found!' }) }
         user.expenses.push(savedexpense._id)
         await user.save()
-        res.json({ message: "User and expense Updated Successfully", data: savedexpense })
+
+        //update category's expense array
+        const useCategory = await Category.findById(category)
+        if (!useCategory) { return res.json({ message: 'Category not found!' }) }
+        useCategory.expenses.push(savedexpense._id)
+        console.log(amount)
+        useCategory.amount = useCategory.amount + amount
+        await useCategory.save()
+        res.json({ message: "User, expense and category Updated Successfully", data: savedexpense })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: err.message })

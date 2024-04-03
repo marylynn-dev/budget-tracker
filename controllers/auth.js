@@ -1,17 +1,20 @@
 const createError = require('http-errors')
 const User = require('../models/user')
+const bcrypt = require('bcrypt');
 const { authSchema } = require('../helpers/validation')
 const { signAccessToken, signRefreshToken, verifyRefreshToken, decodeTokenFunction, getUserIdFromHeader } = require('../helpers/jwt')
 
-const Client = require('../helpers/init-redis')
+const Client = require('../helpers/init-redis');
+const { stringify } = require('querystring');
 
 const registerFunction = async (req, res, next) => {
     try {
-        const { email, password, name } = req.body;
+        const { email, password, name, amount } = req.body;
         const validate = { email: email, password: password }
         const result = await authSchema.validateAsync(validate);
 
         result.name = name;
+        result.amount = amount
 
         const doesExist = await User.findOne({ email: result.email })
         if (doesExist) throw createError.Conflict(`${result.email} has already been registered`)
@@ -97,9 +100,30 @@ const getOne = async (req, res) => {
     }
 }
 
-module.exports = {
-    getOne
+
+const edit = async (req, res) => {
+    const userData = req.body;
+    console.log(userData)
+    // Check if password is present and modified
+    if (userData.password) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(stringify(userData.password), salt);
+            userData.password = hashedPassword;
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    User.findOneAndUpdate({ email: userData.email }, userData, { new: true })
+        .then((userData) => {
+            res.status(200).json({ message: "User was updated successfully" });
+        })
+        .catch((err) => {
+            res.status(500).json({ message: err.message });
+        });
 };
+
 
 
 
@@ -108,5 +132,6 @@ module.exports = {
     logInFunction,
     refreshTokenFunction,
     logOutFunction,
-    getOne
+    getOne,
+    edit
 }

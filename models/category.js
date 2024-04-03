@@ -8,6 +8,15 @@ const categorySchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
+    },
+    expenses: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'expense',
+        }
+    ],
+    amount: {
+        type: Number
     }
 })
 

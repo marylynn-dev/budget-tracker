@@ -25,12 +25,21 @@ const userSchema = new mongoose.Schema({
    expenses: [
       {
          type: mongoose.Schema.Types.ObjectId,
-         ref: 'category',
+         ref: 'expense',
       }
    ],
    budget: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'category',
+   },
+   income: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'income',
+      }
+   ],
+   amount: {
+      type: Number
    }
 })
 
@@ -44,6 +53,10 @@ userSchema.pre('save', async function (next) {
       next(error)
    }
 })
+// userSchema.pre('findOneAndUpdate', async function (next) {
+//    this._update.password = "bb"
+// });
+
 userSchema.post('save', async function (next) {
    try {
 

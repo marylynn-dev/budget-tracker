@@ -3,10 +3,10 @@ const User = require('../models/user.js')
 const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
-    const { title } = req.body
+    const { title, amount } = req.body
     const userId = req.payload.aud
     try {
-        const category = new Category({ title, userId })
+        const category = new Category({ title, userId , amount})
         const savedCategory = await category.save()
 
         const user = await User.findById(userId)

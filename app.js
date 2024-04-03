@@ -20,10 +20,12 @@ app.use(cookieParser());
 const authRoutes = require('./routes/auth')
 const categoryRoutes = require('./routes/category')
 const expenseRoutes = require('./routes/expense')
+const incomeRoutes = require('./routes/income')
 
 app.use('/auth', authRoutes)
 app.use('/category', categoryRoutes)
 app.use('/expense', expenseRoutes)
+app.use('/income', incomeRoutes)
 
 app.get('/', verifyAccessToken, async (req, res, next) => {
     console.log(req.headers['authorization'])
