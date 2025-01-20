@@ -9,23 +9,19 @@ const expenseSchema = mongoose.Schema({
         required: true,
         type: Number
     },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'category',
-    },
-    date: {
-        type: Date,
-        required: true
-    },
     description: {
         required: true,
         type: String
+    },
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category',
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
     }
-})
+}, { timestamps: true })
 
 const expenseModel = mongoose.model('expense', expenseSchema)
 

@@ -1,14 +1,14 @@
 const express = require('express')
-const { verifyAccessTokenFunction } = require('../controllers/jwt')
-const { create, edit, get, getOne, del, getForOneUser } = require('../controllers/expense')
+const { create, edit, get, getOne, del, getForOneUser, weekly } = require('../controllers/expense')
 
 const router = express.Router()
 
-router.get('/', verifyAccessTokenFunction, get)
+router.get('/', get)
 router.get('/one-user', getForOneUser)
-router.post('/', verifyAccessTokenFunction, create)
-router.put('/:id', verifyAccessTokenFunction, edit)
-router.get('/:id', verifyAccessTokenFunction, getOne)
-router.delete('/:id', verifyAccessTokenFunction, del)
+router.get('/weekly', get)
+router.post('/', create)
+router.put('/:id', edit)
+router.get('/:id', getOne)
+router.delete('/:id', del)
 
 module.exports = router

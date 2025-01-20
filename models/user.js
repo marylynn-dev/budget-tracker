@@ -16,31 +16,7 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: true,
    },
-   categories: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'category',
-      }
-   ],
-   expenses: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'expense',
-      }
-   ],
-   budget: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'category',
-   },
-   income: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'income',
-      }
-   ],
-   amount: {
-      type: Number
-   }
+
 })
 
 userSchema.pre('save', async function (next) {

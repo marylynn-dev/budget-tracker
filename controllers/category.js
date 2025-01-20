@@ -4,20 +4,16 @@ const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
     const { title, amount } = req.body
-    const userId = req.payload.aud
+    const userId = req.payload.userId
     try {
-        const category = new Category({ title, userId , amount})
-        const savedCategory = await category.save()
-
         const user = await User.findById(userId)
         if (!user) {
             return res.status(404).json({ message: 'User not found!' });
         }
+        const category = new Category({ title, userId, amount })
+        const savedCategory = await category.save()
 
-        user.categories.push(savedCategory._id)
-        await user.save()
-
-        res.json({ message: "User and Category Updated Successfully", data: savedCategory })
+        res.json({ message: "Category created Successfully", data: savedCategory })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: err.message })
@@ -78,10 +74,8 @@ function del(req, res) {
 
 // get categories for one user
 async function getForOneUser(req, res) {
-    const authHeader = req.headers['authorization'];
-
     try {
-        const userId = getUserIdFromHeader(authHeader);
+        const userId = req.payload.userId
         const categories = await Category.find({ userId: userId }); // Query categories for the specific user
         res.json({ message: "Categories for the user", data: categories });
     } catch (err) {

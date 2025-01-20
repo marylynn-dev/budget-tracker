@@ -2,11 +2,11 @@ GET http://localhost:3001/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoieW91cnMgdHJ1bHkiLCJpYXQiOjE2OTU1MTczNTAsImV4cCI6MTY5NTUyMDk1MCwiYXVkIjoiNjUwZjFiZjA5ZTcxOWIxZGY0NTQ0OThkIiwiaXNzIjoibWUuY29tIn0.l9O2KJ1Oio_jWX-QcMhl2BLg1t5aw5ejUxHttFR4_hk
 
 ### login route
-POST http://localhost:3001/auth/log-in
+POST http://localhost:3001/auth/login
 Content-Type: application/json
 
 {
-     "email": "user@gmail.com",
+     "email": "janeDoe@gmail.com",
      "password" : "1234"
 }
 
@@ -16,9 +16,9 @@ POST http://localhost:3001/auth/register
 Content-Type: application/json
 
 {
-     "email": "user2@gmail.com",
+     "email": "janeDoe@gmail.com",
      "password" : "1234",
-     "name" : "user",
+     "name" : "Jane Doe",
      "amount": 0
 }
 

@@ -4,7 +4,6 @@ const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
     const { title, description, amount, date } = req.body
-
     const userId = req.payload.aud
     try {
         const income = new Income({ title, description, amount, date, userId })

@@ -1,32 +1,13 @@
 const Expense = require('../models/expense.js')
 const User = require('../models/user.js')
-const Category = require('../models/category.js')
-const { getUserIdFromHeader } = require('../helpers/jwt.js')
 
 async function create(req, res) {
-    const { title, amount, category, date, description } = req.body
-
-    const userId = req.payload.aud
+    const { title, amount, categoryId, description } = req.body
+    const userId = req.payload.userId
     try {
-        const expense = new Expense({ title, amount, category, date, description, userId })
-        console.log(category)
-
+        const expense = new Expense({ title, amount, categoryId, description, userId })
         const savedexpense = await expense.save()
-
-        //update user's expense array
-        const user = await User.findById(userId)
-        if (!user) { return res.json({ message: 'User not found!' }) }
-        user.expenses.push(savedexpense._id)
-        await user.save()
-
-        //update category's expense array
-        const useCategory = await Category.findById(category)
-        if (!useCategory) { return res.json({ message: 'Category not found!' }) }
-        useCategory.expenses.push(savedexpense._id)
-        console.log(amount)
-        useCategory.amount = useCategory.amount + amount
-        await useCategory.save()
-        res.json({ message: "User, expense and category Updated Successfully", data: savedexpense })
+        res.json({ message: "Expense created Successfully", data: savedexpense })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: err.message })
@@ -39,7 +20,7 @@ function edit(req, res) {
     Expense
         .findOneAndUpdate({ _id: expenseId }, expenseData, { new: true })
         .then((expenseData) => {
-            res.json({ message: "expense was updated successfully", data: { expenseData } })
+            res.json({ message: "Expense was updated successfully", data: { expenseData } })
         })
         .catch((err) => {
             res.status(500).json({ message: err.message });
@@ -66,7 +47,6 @@ function getOne(req, res) {
 function del(req, res) {
     const expenseId = req.params.id;
 
-    // Step 1: Delete the expense
     Expense.deleteOne({ _id: expenseId })
         .then(() => {
             // Step 2: Update the users to remove the expense ID from their expense array
@@ -86,10 +66,8 @@ function del(req, res) {
 }
 //get for one user
 async function getForOneUser(req, res) {
-    const authHeader = req.headers['authorization'];
-
     try {
-        const userId = getUserIdFromHeader(authHeader);
+        const userId = req.payload.userId
         const expenses = await Expense.find({ userId: userId }).sort({ date: 1 });
 
 
@@ -109,6 +87,28 @@ async function getForOneUser(req, res) {
         res.status(500).json({ message: err.message });
     }
 }
+// a users weekly expenses
+async function weekly(req, res) {
+    try {
+        const currentDate = new Date();
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+        const weeklyExpenses = await Expense.find({
+            user: req.payload.userId,
+            date: { $gte: oneWeekAgo, $lte: currentDate }
+        });
+
+        if (!weeklyExpenses) {
+            return res.status(404).json({ message: 'No expenses found for the past week' });
+        }
+
+        res.status(200).json({ expenses: weeklyExpenses });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error', error: err });
+    }
+}
 
 
 
@@ -120,5 +120,6 @@ module.exports = {
     get,
     getOne,
     del,
-    getForOneUser
+    getForOneUser,
+    weekly
 }

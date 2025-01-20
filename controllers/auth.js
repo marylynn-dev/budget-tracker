@@ -2,15 +2,12 @@ const createError = require('http-errors')
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const { authSchema } = require('../helpers/validation')
-const { signAccessToken, signRefreshToken, verifyRefreshToken, decodeTokenFunction, getUserIdFromHeader } = require('../helpers/jwt')
+const { signAccessToken } = require('../helpers/jwt')
 
-const Client = require('../helpers/init-redis');
-const { stringify } = require('querystring');
-
-const registerFunction = async (req, res, next) => {
+const register = async (req, res, next) => {
     try {
-        const { email, password, name, amount } = req.body;
-        const validate = { email: email, password: password }
+        const { email, name, amount } = req.body;
+        const validate = { email: email, password: req.body.password }
         const result = await authSchema.validateAsync(validate);
 
         result.name = name;
@@ -21,8 +18,8 @@ const registerFunction = async (req, res, next) => {
         const user = new User(result)
         const savedUser = await user.save()
         const accessToken = await signAccessToken(savedUser.id)
-        const refreshToken = await signRefreshToken(savedUser.id)
-        res.send({ accessToken, refreshToken })
+        const { password, ...passwordLessUser } = savedUser.toObject();
+        res.send({ passwordLessUser, accessToken })
 
     } catch (error) {
         console.log(error)
@@ -31,57 +28,32 @@ const registerFunction = async (req, res, next) => {
     }
 }
 
-const logInFunction = async (req, res, next) => {
+const login = async (req, res, next) => {
     try {
         const result = await authSchema.validateAsync(req.body)
         const user = await User.findOne({ email: result.email })
         if (!user) throw createError.NotFound('User not registered')
 
         const isMatch = await user.isValidPassword(result.password)
-        if (isMatch) throw createError.Unauthorized('Username/Password is not valid')
+        if (!isMatch) throw createError.Unauthorized('Username/Password is not valid')
 
-        // Assuming these functions sign the tokens
         const accessToken = await signAccessToken(user.id)
-        const refreshToken = await signRefreshToken(user.id)
-
-        res.send({ accessToken, refreshToken });
+        const { password, ...passwordLessUser } = user.toObject();
+        res.send({ passwordLessUser, accessToken });
     } catch (error) {
         if (error.isJoi === true) return next(createError.BadRequest('Invalid Username/Password'))
         next(error)
     }
 }
 
-
-const refreshTokenFunction = async (req, res, next) => {
-    try {
-        const { refreshToken } = req.body
-        if (!refreshToken) throw createError.BadRequest()
-        const userId = await verifyRefreshToken(refreshToken)
-        const accessToken = await signAccessToken(userId)
-        const refToken = await signRefreshToken(userId)
-        res.send({ accessToken, refToken })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const logOutFunction = async (req, res, next) => {
-    try {
-        const { refreshToken } = req.body
-        if (!refreshToken) throw createError.BadRequest()
-        const userId = await verifyRefreshToken(refreshToken)
-        Client.DEL(userId, (err, value) => {
-            if (err) {
-                console.log(err.message)
-                throw createError.InternalServerError()
-            }
-            console.log(value)
-            res.sendStatus(204)
-        })
-    } catch (error) {
-        next(error)
-    }
-}
+// const logOutFunction = async (req, res, next) => {
+//     try {
+//         const { refreshToken } = req.body
+//         if (!refreshToken) throw createError.BadRequest()
+//     } catch (error) {
+//         next(error)
+//     }
+// }
 
 const getOne = async (req, res) => {
     const authHeader = req.headers['authorization'];
@@ -128,10 +100,8 @@ const edit = async (req, res) => {
 
 
 module.exports = {
-    registerFunction,
-    logInFunction,
-    refreshTokenFunction,
-    logOutFunction,
+    register,
+    login,
     getOne,
     edit
 }

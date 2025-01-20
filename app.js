@@ -2,7 +2,6 @@
 const express = require('express')
 const morgan = require('morgan')
 const createError = require('http-errors')
-const { verifyAccessToken } = require('./helpers/jwt')
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 
@@ -21,24 +20,22 @@ const authRoutes = require('./routes/auth')
 const categoryRoutes = require('./routes/category')
 const expenseRoutes = require('./routes/expense')
 const incomeRoutes = require('./routes/income')
+const { verifyAccessToken } = require('./helpers/jwt')
 
+//excluded from protection
 app.use('/auth', authRoutes)
+
+// Middleware for protected routes
+app.use(verifyAccessToken);
 app.use('/category', categoryRoutes)
 app.use('/expense', expenseRoutes)
 app.use('/income', incomeRoutes)
-
-app.get('/', verifyAccessToken, async (req, res, next) => {
-    console.log(req.headers['authorization'])
-    res.send('Hello from express')
-})
 
 //environment configuration
 require('dotenv').config()
 
 //database connection
 require('./helpers/mongodb')
-require('./helpers/init-redis')
-
 
 //error handling middleware
 app.use(async (req, res, next) => {
