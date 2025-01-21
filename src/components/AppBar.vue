@@ -35,11 +35,3 @@
 <script setup>
 //
 </script>
-
-<template>
-  <v-card class="fill-height" title="Purchases and Sales">
-    <template #text>
-      <Bar :options="chartOptions" :data="chartData" />
-    </template>
-  </v-card>
-</template>
