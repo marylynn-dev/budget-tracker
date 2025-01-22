@@ -11,18 +11,25 @@
       <Card :dashCards="cards" />
     </v-row>
     <v-row>
-      <v-col cols="12" md="12" lg="6">
-        <v-card title="Purchases and Sales">
+      <v-col cols="12" md="12" lg="8">
+        <v-card>
           <template #text>
+            <p class="text-h4 font-weight-bold">Balance Trends</p>
+            <p class="text-h5 font-weight-bold">$234567</p>
             <Chart />
           </template>
         </v-card>
+      </v-col>
+      <v-col>
+        <MonthlyExpenseCard />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
+import MonthlyExpenseCard from "@/components/dashboard/MonthlyExpenseCard.vue";
+
 const cards = [
   {
     title: "Total Revenue",

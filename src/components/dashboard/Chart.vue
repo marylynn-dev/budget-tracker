@@ -26,12 +26,12 @@ ChartJS.register(
   LineElement
 );
 
-const labels = [1, 2, 3, 4, 5, 6, 7];
+const labels = getWeekLabels();
 const data = {
   labels: labels,
   datasets: [
     {
-      label: "My First Dataset",
+      label: "",
       data: [65, 59, 80, 81, 56, 55, 40],
       fill: false,
       borderColor: "rgb(75, 192, 192)",
@@ -43,4 +43,37 @@ const data = {
 const chartOptions = reactive({
   responsive: true,
 });
+
+function getWeekLabels() {
+  const today = new Date();
+  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())); // Sunday
+  const labels = [];
+
+  for (let i = 0; i < 7; i++) {
+    const currentDay = new Date(startOfWeek);
+    currentDay.setDate(startOfWeek.getDate() + i);
+
+    const day = currentDay.getDate();
+    const month = currentDay.toLocaleString("default", { month: "short" }); // e.g., 'Jan'
+    const suffix = getDaySuffix(day);
+
+    labels.push(`${day}${suffix} ${month}`);
+  }
+
+  return labels;
+}
+
+function getDaySuffix(day) {
+  if (day >= 11 && day <= 13) return "th"; // Special case for 11th, 12th, 13th
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}
 </script>
