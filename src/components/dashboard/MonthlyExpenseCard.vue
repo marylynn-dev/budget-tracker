@@ -1,61 +1,67 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-text>
-        <p class="font-weight-bold text-h6">Monthly Expenses Breakdown</p>
-        <!-- Progress bar with 3 datasets represented -->
-        <v-progress-linear
-          :value="100"
-          :height="24"
-          rounded
-          style="
-            background: linear-gradient(
-              to right,
-              blue 0%,
-              blue 40%,
-              /* Dataset 1 */ green 40%,
-              green 70%,
-              /* Dataset 2 */ red 70%,
-              red 100% /* Dataset 3 */
-            );
-          "
-        ></v-progress-linear>
+  <v-card style="width: 100vw">
+    <v-card-text>
+      <p class="font-weight-bold text-h6">Monthly Expenses Breakdown</p>
 
-        <!-- Data labels -->
-        <div class="d-flex justify-space-between mt-3">
-          <div style="color: blue">
-            Dataset 1: {{ dataSet1 }}% ({{ dataSet1Amount }} units)
-          </div>
-          <div style="color: green">
-            Dataset 2: {{ dataSet2 }}% ({{ dataSet2Amount }} units)
-          </div>
-          <div style="color: red">
-            Dataset 3: {{ dataSet3 }}% ({{ dataSet3Amount }} units)
-          </div>
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-container>
+      <!-- Progress bar with 7 datasets -->
+      <v-progress-linear
+        :value="100"
+        :height="8"
+        rounded
+        style="
+          background: linear-gradient(
+            to right,
+            blue 0%,
+            blue 15%,
+            /* Dataset 1 */ green 15%,
+            green 30%,
+            /* Dataset 2 */ red 30%,
+            red 45%,
+            /* Dataset 3 */ orange 45%,
+            orange 60%,
+            /* Dataset 4 */ purple 60%,
+            purple 75%,
+            /* Dataset 5 */ teal 75%,
+            teal 85%,
+            /* Dataset 6 */ yellow 85%,
+            yellow 100% /* Dataset 7 */
+          );
+          margin-top: 10px;
+        "
+      ></v-progress-linear>
+
+      <!-- Dynamic List of Expenses -->
+      <v-list dense>
+        <v-list-item v-for="(expense, index) in expenses" :key="index">
+          <template #prepend>
+            <v-avatar :color="expense.color" size="16px"></v-avatar>
+          </template>
+          <v-list-item-content>
+            <v-list-item-title>{{ expense.title }}</v-list-item-title>
+          </v-list-item-content>
+          <template #append>
+            <span class="text-secondary">${{ expense.amount }}</span
+            >&nbsp;&nbsp;
+            <span class="font-weight-bold">{{ expense.percent }}</span>
+          </template>
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+  </v-card>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      // Data for three categories
-      dataSet1: 40, // Dataset 1 percentage
-      dataSet2: 30, // Dataset 2 percentage
-      dataSet3: 30, // Dataset 3 percentage
-
-      // Unit values for context
-      dataSet1Amount: 400, // Amount for Dataset 1
-      dataSet2Amount: 300, // Amount for Dataset 2
-      dataSet3Amount: 300, // Amount for Dataset 3
-    };
-  },
-};
+<script setup>
+const expenses = [
+  { title: "Food", amount: 1200, percent: "15%", color: "blue" },
+  { title: "Transport", amount: 1000, percent: "15%", color: "green" },
+  { title: "Healthcare", amount: 800, percent: "15%", color: "red" },
+  { title: "Entertainment", amount: 700, percent: "15%", color: "orange" },
+  { title: "Utilities", amount: 600, percent: "15%", color: "purple" },
+  { title: "Clothing", amount: 500, percent: "10%", color: "teal" },
+  { title: "Miscellaneous", amount: 400, percent: "15%", color: "yellow" },
+];
 </script>
 
 <style scoped>
-/* Optional: Add padding or custom styles */
+/* Optional: Add custom styling for spacing or typography */
 </style>

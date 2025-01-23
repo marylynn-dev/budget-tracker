@@ -1,5 +1,11 @@
 <template>
-  <Line :data="data" :options="chartOptions" />
+  <v-card style="width: 100vw">
+    <template #text>
+      <p class="text-h4 font-weight-bold">Balance Trends</p>
+      <p class="text-h5 font-weight-bold">$234567</p>
+    </template>
+    <Line :data="data" :options="chartOptions" />
+  </v-card>
 </template>
 
 <script setup>

@@ -14,21 +14,27 @@
       <v-list-item prepend-icon="mdi-face-agent"></v-list-item>
     </v-list>
   </v-navigation-drawer>
-
   <v-app-bar flat>
-    <v-row>
-      <v-col cols="12" md="8" lg="4">
-        <v-text-field
-          append-inner-icon="mdi-magnify"
-          density="compact"
-          variant="solo"
-          placeholder="Search Here"
-        >
-        </v-text-field>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col> </v-col>
-    </v-row>
+    <v-container>
+      <v-row>
+        <!-- Search Bar -->
+        <v-col cols="12" md="8" lg="4" class="d-flex align-center justify-end">
+          <v-text-field
+            append-inner-icon="mdi-magnify"
+            density="compact"
+            variant="solo"
+            placeholder="Search Here"
+          ></v-text-field>
+        </v-col>
+
+        <v-spacer></v-spacer>
+
+        <!-- Account Icon -->
+        <v-col class="d-flex align-center justify-end">
+          <v-icon>mdi-account</v-icon>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-app-bar>
 </template>
 
