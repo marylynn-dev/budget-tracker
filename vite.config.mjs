@@ -71,4 +71,7 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: 'src/dist',
+  },
 })
