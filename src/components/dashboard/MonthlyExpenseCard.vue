@@ -13,18 +13,18 @@
             to right,
             blue 0%,
             blue 15%,
-            /* Dataset 1 */ green 15%,
+            green 15%,
             green 30%,
-            /* Dataset 2 */ red 30%,
+            red 30%,
             red 45%,
-            /* Dataset 3 */ orange 45%,
+            orange 45%,
             orange 60%,
-            /* Dataset 4 */ purple 60%,
+            purple 60%,
             purple 75%,
-            /* Dataset 5 */ teal 75%,
+            teal 75%,
             teal 85%,
-            /* Dataset 6 */ yellow 85%,
-            yellow 100% /* Dataset 7 */
+            yellow 85%,
+            yellow 100%
           );
           margin-top: 10px;
         "
@@ -61,7 +61,3 @@ const expenses = [
   { title: "Miscellaneous", amount: 400, percent: "15%", color: "yellow" },
 ];
 </script>
-
-<style scoped>
-/* Optional: Add custom styling for spacing or typography */
-</style>

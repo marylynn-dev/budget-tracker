@@ -42,7 +42,7 @@
         <v-card title="Transaction History" class="fill-height">
           <v-data-table
             :headers="headers"
-            :items="desserts"
+            :items="items"
             item-value="id"
             hide-default-footer
           >
@@ -97,12 +97,30 @@ const headers = [
   { key: "description", title: "Description" },
   { key: "amount", title: "Amount" },
 ];
-const desserts = [
+const items = [
   {
     category: "Beauty",
     date: "12.03.2024",
     description: "Grocery items and beverage soft drinks",
     amount: -32.5,
+  },
+  {
+    category: "Health",
+    date: "13.03.2024",
+    description: "Medical supplies",
+    amount: -50.0,
+  },
+  {
+    category: "Health",
+    date: "13.03.2024",
+    description: "Medical supplies",
+    amount: -50.0,
+  },
+  {
+    category: "Health",
+    date: "13.03.2024",
+    description: "Medical supplies",
+    amount: -50.0,
   },
   {
     category: "Health",

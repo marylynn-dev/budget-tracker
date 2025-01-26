@@ -4,7 +4,6 @@
       <p class="font-weight-bold text-h6">Monthly Expenses Breakdown</p>
 
       <v-list dense>
-        <!-- Loop through list items -->
         <v-list-item v-for="(expense, index) in expenses" :key="index">
           <!-- Icon or Avatar for the item -->
           <template #prepend>
@@ -77,7 +76,3 @@ const expenses = [
   },
 ];
 </script>
-
-<style scoped>
-/* Optional: Add custom styling for spacing or typography */
-</style>

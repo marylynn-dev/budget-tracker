@@ -11,7 +11,6 @@
         <template #append>
           <div>
             <p>{{ item.amount }}</p>
-            <!-- Display amount here -->
             <p>
               <v-chip
                 :color="
@@ -39,19 +38,31 @@ const items = [
     title: "Electricity",
     date: "5 January 2025",
     status: "Paid",
-    amount: "+450", // Add amount for each item
+    amount: "+450",
   },
   {
     title: "Water",
     date: "10 January 2025",
     status: "Due",
-    amount: "+200", // Amount for Water
+    amount: "+200",
   },
   {
     title: "Internet",
     date: "15 January 2025",
     status: "Overdue",
-    amount: "+120", // Amount for Internet
+    amount: "+120",
+  },
+  {
+    title: "Water",
+    date: "10 January 2025",
+    status: "Due",
+    amount: "+200",
+  },
+  {
+    title: "Water",
+    date: "10 January 2025",
+    status: "Due",
+    amount: "+200",
   },
 ];
 

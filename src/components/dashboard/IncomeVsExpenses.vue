@@ -19,7 +19,6 @@ import {
   LinearScale,
 } from "chart.js";
 
-// Register chart.js components
 ChartJS.register(
   Title,
   Tooltip,
@@ -29,7 +28,6 @@ ChartJS.register(
   LinearScale
 );
 
-// Reactive state for chart data with multiple datasets
 const chartData = reactive({
   labels: [
     "January",
@@ -55,6 +53,5 @@ const chartData = reactive({
   ],
 });
 
-// Reactive state for chart options
-const chartOptions = reactive({});
+const chartOptions = {};
 </script>

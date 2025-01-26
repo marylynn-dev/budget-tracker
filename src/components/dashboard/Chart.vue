@@ -17,11 +17,10 @@ import {
   Legend,
   CategoryScale,
   LinearScale,
-  PointElement, // Register PointElement
-  LineElement, // Register LineElement
+  PointElement,
+  LineElement,
 } from "chart.js";
 
-// Register all necessary components
 ChartJS.register(
   Title,
   Tooltip,
@@ -52,7 +51,7 @@ const chartOptions = reactive({
 
 function getWeekLabels() {
   const today = new Date();
-  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())); // Sunday
+  const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
   const labels = [];
 
   for (let i = 0; i < 7; i++) {
@@ -60,7 +59,7 @@ function getWeekLabels() {
     currentDay.setDate(startOfWeek.getDate() + i);
 
     const day = currentDay.getDate();
-    const month = currentDay.toLocaleString("default", { month: "short" }); // e.g., 'Jan'
+    const month = currentDay.toLocaleString("default", { month: "short" });
     const suffix = getDaySuffix(day);
 
     labels.push(`${day}${suffix} ${month}`);
@@ -70,7 +69,7 @@ function getWeekLabels() {
 }
 
 function getDaySuffix(day) {
-  if (day >= 11 && day <= 13) return "th"; // Special case for 11th, 12th, 13th
+  if (day >= 11 && day <= 13) return "th";
   switch (day % 10) {
     case 1:
       return "st";
