@@ -5,7 +5,7 @@
         prepend-icon="mdi-view-dashboard"
         to="/dashboard"
       ></v-list-item>
-      <v-list-item prepend-icon="mdi-account-box"></v-list-item>
+      <v-list-item prepend-icon="mdi-account-box" to="/wallet"></v-list-item>
       <v-list-item prepend-icon="mdi-wallet-bifold"></v-list-item>
       <v-list-item prepend-icon="mdi-cash"></v-list-item>
       <v-list-item prepend-icon="mdi-bullseye-arrow"></v-list-item>
@@ -25,7 +25,8 @@
             variant="outlined"
             placeholder="Search Here"
             rounded="0"
-            class="d-flex align-center"
+            class="d-flex"
+            min-width="200px"
           ></v-text-field>
         </v-col>
 

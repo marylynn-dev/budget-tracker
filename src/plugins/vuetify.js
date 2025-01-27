@@ -30,7 +30,7 @@ const myCustomDarkTheme = {
 // Vuetify Instance
 export default createVuetify({
   theme: {
-    defaultTheme: 'myCustomDarkTheme', // Default theme
+    defaultTheme: 'myCustomLightTheme', // Default theme
     themes: {
       myCustomLightTheme,
       myCustomDarkTheme,
