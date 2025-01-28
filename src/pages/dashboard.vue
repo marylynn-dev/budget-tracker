@@ -8,7 +8,15 @@
       <v-col> </v-col>
     </v-row>
     <v-row>
-      <Card :dashCards="cards" />
+      <v-col
+        v-for="(card, index) in cards"
+        :key="index"
+        cols="12"
+        md="6"
+        lg="3"
+      >
+        <Card :card="card" />
+      </v-col>
     </v-row>
     <v-row class="mt-10" justify="space-between">
       <v-col cols="12" md="12" lg="8" class="d-flex align-stretch">
