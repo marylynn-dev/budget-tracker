@@ -6,7 +6,7 @@
         to="/dashboard"
       ></v-list-item>
       <v-list-item prepend-icon="mdi-account-box" to="/wallets"></v-list-item>
-      <v-list-item prepend-icon="mdi-wallet-bifold"></v-list-item>
+      <v-list-item prepend-icon="mdi-wallet-bifold" to="/budgets"></v-list-item>
       <v-list-item prepend-icon="mdi-cash"></v-list-item>
       <v-list-item prepend-icon="mdi-bullseye-arrow"></v-list-item>
       <v-list-item prepend-icon="mdi-account"></v-list-item>
