@@ -5,7 +5,6 @@
         <p class="text-h5 font-weight-bold">Wallets</p>
         <p class="font-weight-light text-secondary">Welcome to budgetBuddy</p>
       </v-col>
-      <v-col> </v-col>
     </v-row>
     <v-row>
       <v-col cols="12" md="8" lg="4"> <Card :cards="cardData" /> </v-col>

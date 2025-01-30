@@ -12,7 +12,7 @@ const myCustomLightTheme = {
     background: '#f0f0f0',
     primary: '#302cd8',
     secondary: '#858ea5',
-    text: '#10327a', // Text color for light theme
+    text: 'red', // Text color for light theme
   },
 }
 
